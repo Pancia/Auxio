@@ -18,17 +18,18 @@
  
 package org.oxycblt.auxio.playback.queue
 
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.oxycblt.auxio.list.recycler.MaterialDragCallback
 
 /**
- * A highly customized [ItemTouchHelper.Callback] that enables some extra eye candy in the queue UI,
+ * A highly customized [MaterialDragCallback] that enables some extra eye candy in the queue UI,
  * such as an animation when lifting items.
  *
  * @author Alexander Capehart (OxygenCobalt)
  */
 class QueueDragCallback(private val queueModel: QueueViewModel) : MaterialDragCallback() {
+    override val rightSwipeEnabled = true
+
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -40,15 +41,10 @@ class QueueDragCallback(private val queueModel: QueueViewModel) : MaterialDragCa
         )
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.bindingAdapterPosition
-        when (direction) {
-            ItemTouchHelper.START -> queueModel.removeQueueDataItem(position)
-            ItemTouchHelper.END -> {
-                // Non-destructive: copy the song into the user queue, then reset
-                // the swiped view back to its original position.
-                queueModel.addToUserQueue(position)
-                viewHolder.bindingAdapter?.notifyItemChanged(position)
-            }
-        }
+        queueModel.removeQueueDataItem(viewHolder.bindingAdapterPosition)
+    }
+
+    override fun onRightSwipe(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        queueModel.addToUserQueue(position)
     }
 }

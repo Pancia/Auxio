@@ -683,8 +683,7 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
                     (ack.from > stateMirror.index && ack.from <= userQueueEnd) ||
                         (ack.to > stateMirror.index && ack.to <= userQueueEnd) ||
                         stateMirror.index != newIndex
-                val newUserQueueSize =
-                    if (moveTouchesUserQueue) 0 else stateMirror.userQueueSize
+                val newUserQueueSize = if (moveTouchesUserQueue) 0 else stateMirror.userQueueSize
 
                 stateMirror =
                     stateMirror.copy(

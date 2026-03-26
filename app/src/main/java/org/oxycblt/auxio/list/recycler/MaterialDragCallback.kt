@@ -45,23 +45,33 @@ import timber.log.Timber as L
  */
 abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
     private var shouldLift = true
+    private var rightSwipeTriggered = false
+    private var rightSwipePosition = RecyclerView.NO_POSITION
+    private var currentSwipeDirection = 0
 
     /** Swipe directions enabled for this callback. Override to restrict. */
     open val swipeFlags: Int
-        get() = ItemTouchHelper.START or ItemTouchHelper.END
+        get() = ItemTouchHelper.START
+
+    /**
+     * Whether right-swipe (END) visual feedback and threshold detection is enabled. When true, END
+     * is added to swipe flags automatically but clamped so it never triggers [onSwiped]. Instead,
+     * [onRightSwipe] fires when the user drags past [RIGHT_SWIPE_THRESHOLD].
+     */
+    open val rightSwipeEnabled: Boolean
+        get() = false
 
     final override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
-    ) =
-        if (viewHolder is ViewHolder && viewHolder.enabled) {
-            makeFlag(
-                ItemTouchHelper.ACTION_STATE_DRAG,
-                ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ) or makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, swipeFlags)
-        } else {
-            0
-        }
+    ): Int {
+        if (viewHolder !is ViewHolder || !viewHolder.enabled) return 0
+        val drag =
+            makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.UP or ItemTouchHelper.DOWN)
+        val effectiveSwipeFlags =
+            if (rightSwipeEnabled) swipeFlags or ItemTouchHelper.END else swipeFlags
+        return drag or makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, effectiveSwipeFlags)
+    }
 
     override fun interpolateOutOfBoundsScroll(
         recyclerView: RecyclerView,
@@ -89,6 +99,14 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
 
         return clampedAbsVelocity * sign(viewSizeOutOfBounds.toDouble()).toInt()
     }
+
+    // Block right-swipe from ever triggering onSwiped by returning impossible
+    // thresholds when we detect the user is swiping right.
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float =
+        if (rightSwipeEnabled && currentSwipeDirection > 0) Float.MAX_VALUE else 0.5f
+
+    override fun getSwipeEscapeVelocity(defaultValue: Float): Float =
+        if (rightSwipeEnabled && currentSwipeDirection > 0) Float.MAX_VALUE else defaultValue
 
     final override fun onChildDraw(
         c: Canvas,
@@ -131,12 +149,24 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
         // not being swiped. This issue is also the reason why the background is not merged with
         // the FrameLayout within the item.
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            currentSwipeDirection = dX.compareTo(0f)
             val swipingLeft = dX < 0f
             val swipingRight = dX > 0f
             holder.delete.isInvisible = !swipingLeft
             holder.deleteIcon.isInvisible = !swipingLeft
-            holder.addNext.isInvisible = !swipingRight
-            holder.addNextIcon.isInvisible = !swipingRight
+            if (rightSwipeEnabled) {
+                holder.addNext.isInvisible = !swipingRight
+                holder.addNextIcon.isInvisible = !swipingRight
+            }
+
+            // Detect right-swipe past threshold for add-to-queue action.
+            if (rightSwipeEnabled && isCurrentlyActive && swipingRight) {
+                val width = holder.body.width.toFloat()
+                if (dX > width * RIGHT_SWIPE_THRESHOLD && !rightSwipeTriggered) {
+                    rightSwipeTriggered = true
+                    rightSwipePosition = viewHolder.bindingAdapterPosition
+                }
+            }
         }
 
         // Update other translations. We do not call the default implementation, so we must do
@@ -170,6 +200,18 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
         }
 
         shouldLift = true
+        currentSwipeDirection = 0
+
+        // If a right-swipe was triggered, fire the callback now that the view
+        // has snapped back to its original position.
+        if (rightSwipeTriggered) {
+            val position = rightSwipePosition
+            rightSwipeTriggered = false
+            rightSwipePosition = RecyclerView.NO_POSITION
+            if (position != RecyclerView.NO_POSITION) {
+                onRightSwipe(viewHolder, position)
+            }
+        }
 
         // Reset swipe backgrounds and icons
         holder.delete.isInvisible = true
@@ -185,6 +227,12 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
 
     // Long-press events are too buggy, only allow dragging with the handle.
     final override fun isLongPressDragEnabled() = false
+
+    /**
+     * Called when a right-swipe past the threshold is detected and the view has snapped back.
+     * Override to handle non-destructive right-swipe actions.
+     */
+    open fun onRightSwipe(viewHolder: RecyclerView.ViewHolder, position: Int) {}
 
     /** Required [RecyclerView.ViewHolder] implementation that exposes required fields */
     interface ViewHolder {
@@ -209,5 +257,7 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
     companion object {
         const val MINIMUM_INITIAL_DRAG_VELOCITY = 10
         const val MAXIMUM_INITIAL_DRAG_VELOCITY = 25
+        /** Fraction of view width the user must swipe right to trigger the action. */
+        const val RIGHT_SWIPE_THRESHOLD = 0.3f
     }
 }

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+ 
 package org.oxycblt.auxio.widgets
 
 import android.appwidget.AppWidgetManager
@@ -109,8 +109,7 @@ class ControlsWidgetProvider : AppWidgetProvider() {
     private fun requestUpdate(context: Context) {
         L.d("Sending controls widget update intent to PlaybackService")
         val intent =
-            Intent(ACTION_CONTROLS_WIDGET_UPDATE)
-                .addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY)
+            Intent(ACTION_CONTROLS_WIDGET_UPDATE).addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY)
         context.sendBroadcast(intent)
     }
 
@@ -175,10 +174,7 @@ class ControlsWidgetProvider : AppWidgetProvider() {
         return this
     }
 
-    private fun RemoteViews.setupFullControls(
-        context: Context,
-        state: ControlsState,
-    ): RemoteViews {
+    private fun RemoteViews.setupFullControls(context: Context, state: ControlsState): RemoteViews {
         setupTimelineControls(context, state)
 
         setOnClickPendingIntent(
@@ -228,8 +224,8 @@ class ControlsWidgetProvider : AppWidgetProvider() {
 
     companion object {
         /**
-         * Broadcast when [ControlsWidgetProvider] desires to update its widget with new information.
-         * Responsible background tasks should intercept this and relay the message to
+         * Broadcast when [ControlsWidgetProvider] desires to update its widget with new
+         * information. Responsible background tasks should intercept this and relay the message to
          * [ControlsWidgetComponent].
          */
         const val ACTION_CONTROLS_WIDGET_UPDATE =

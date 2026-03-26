@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+ 
 package org.oxycblt.auxio.widgets
 
 import android.content.Context
@@ -47,8 +47,7 @@ private constructor(
         private val playbackManager: PlaybackStateManager,
         private val uiSettings: UISettings,
     ) {
-        fun create(context: Context) =
-            ControlsWidgetComponent(context, playbackManager, uiSettings)
+        fun create(context: Context) = ControlsWidgetComponent(context, playbackManager, uiSettings)
     }
 
     private val controlsWidgetProvider = ControlsWidgetProvider()
@@ -73,8 +72,7 @@ private constructor(
         val isShuffled = playbackManager.isShuffled
 
         L.d("Updating controls widget with new playback state")
-        val state =
-            ControlsWidgetProvider.ControlsState(song, isPlaying, repeatMode, isShuffled)
+        val state = ControlsWidgetProvider.ControlsState(song, isPlaying, repeatMode, isShuffled)
         controlsWidgetProvider.update(context, uiSettings, state)
     }
 
