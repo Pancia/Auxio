@@ -122,6 +122,18 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
     }
 
     /**
+     * Add a queue item to the user queue (after the current "play next" block).
+     *
+     * @param adapterIndex The index of the queue item to add. Does nothing if the index is out of
+     *   range.
+     */
+    fun addToUserQueue(adapterIndex: Int) {
+        val song = queue.value.getOrNull(adapterIndex) ?: return
+        L.d("Adding item $adapterIndex to user queue")
+        playbackManager.addToUserQueue(song)
+    }
+
+    /**
      * Remove a queue item at the given index.
      *
      * @param adapterIndex The index of the queue item to play. Does nothing if the index is out of

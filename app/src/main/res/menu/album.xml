@@ -17,6 +17,10 @@
         android:icon="@drawable/ic_play_next_24"
         android:title="@string/lbl_play_next" />
     <item
+        android:id="@+id/action_user_queue_add"
+        android:icon="@drawable/ic_queue_add_24"
+        android:title="@string/lbl_user_queue_add" />
+    <item
         android:id="@+id/action_queue_add"
         android:icon="@drawable/ic_queue_add_24"
         android:title="@string/lbl_queue_add" />

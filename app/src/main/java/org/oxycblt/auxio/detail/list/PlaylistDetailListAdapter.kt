@@ -231,6 +231,7 @@ private constructor(private val binding: ItemEditableSongBinding) :
     override val root = binding.root
     override val body = binding.body
     override val delete = binding.background
+    override val addNext = binding.addNextBackground
     override val background =
         MaterialShapeDrawable.createWithElevationOverlay(binding.root.context).apply {
             fillColor = binding.context.getAttrColorCompat(MR.attr.colorSurfaceContainerHigh)
@@ -262,9 +263,10 @@ private constructor(private val binding: ItemEditableSongBinding) :
         binding.songAlbumCover.bind(song)
         binding.songName.text = song.name.resolve(binding.context)
         binding.songInfo.text = song.artists.resolveNames(binding.context)
-        // Not swiping this ViewHolder if it's being re-bound, ensure that the background is
+        // Not swiping this ViewHolder if it's being re-bound, ensure that the backgrounds are
         // not visible. See MaterialDragCallback for why this is done.
         binding.background.isInvisible = true
+        binding.addNextBackground.isInvisible = true
     }
 
     override fun updateSelectionIndicator(isSelected: Boolean) {

@@ -124,6 +124,7 @@
 
     <string name="lbl_queue">Queue</string>
     <string name="lbl_play_next">Play next</string>
+    <string name="lbl_user_queue_add">Add to user queue</string>
     <string name="lbl_queue_add">Add to queue</string>
 
     <string name="lbl_playlist_add">Add to playlist</string>
@@ -196,6 +197,7 @@
     <string name="lng_indexing">Loading your music library…</string>
     <string name="lng_observing">Monitoring your music library for changes…</string>
     <string name="lng_queue_added">Added to queue</string>
+    <string name="lng_user_queue_added">Added to user queue</string>
     <string name="lng_play_next">Song will play next</string>
     <string name="lng_playlist_created">Playlist created</string>
     <string name="lng_playlist_imported">Playlist imported</string>
@@ -362,6 +364,7 @@
     <string name="desc_exit">Stop playback</string>
 
     <string name="desc_remove_song">Remove this song</string>
+    <string name="desc_add_to_user_queue">Add this song next in queue</string>
     <string name="desc_song_handle">Move this song</string>
     <string name="desc_queue_bar">Open the queue</string>
     <string name="desc_tab_handle">Move this tab</string>

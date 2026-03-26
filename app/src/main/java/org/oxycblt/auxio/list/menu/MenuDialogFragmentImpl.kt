@@ -76,6 +76,10 @@ class SongMenuDialogFragment : MenuDialogFragment<Menu.ForSong>() {
                 playbackModel.playNext(menu.song)
                 requireContext().showToast(R.string.lng_play_next)
             }
+            R.id.action_user_queue_add -> {
+                playbackModel.addToUserQueue(menu.song)
+                requireContext().showToast(R.string.lng_user_queue_added)
+            }
             R.id.action_queue_add -> {
                 playbackModel.addToQueue(menu.song)
                 requireContext().showToast(R.string.lng_queue_added)
@@ -127,6 +131,10 @@ class AlbumMenuDialogFragment : MenuDialogFragment<Menu.ForAlbum>() {
                 playbackModel.playNext(menu.album)
                 requireContext().showToast(R.string.lng_play_next)
             }
+            R.id.action_user_queue_add -> {
+                playbackModel.addToUserQueue(menu.album)
+                requireContext().showToast(R.string.lng_user_queue_added)
+            }
             R.id.action_queue_add -> {
                 playbackModel.addToQueue(menu.album)
                 requireContext().showToast(R.string.lng_queue_added)
@@ -164,6 +172,7 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
                 R.id.action_play,
                 R.id.action_shuffle,
                 R.id.action_play_next,
+                R.id.action_user_queue_add,
                 R.id.action_queue_add,
                 R.id.action_playlist_add,
                 R.id.action_share,
@@ -201,6 +210,10 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
             R.id.action_play_next -> {
                 playbackModel.playNext(menu.artist)
                 requireContext().showToast(R.string.lng_play_next)
+            }
+            R.id.action_user_queue_add -> {
+                playbackModel.addToUserQueue(menu.artist)
+                requireContext().showToast(R.string.lng_user_queue_added)
             }
             R.id.action_queue_add -> {
                 playbackModel.addToQueue(menu.artist)
@@ -254,6 +267,10 @@ class GenreMenuDialogFragment : MenuDialogFragment<Menu.ForGenre>() {
                 playbackModel.playNext(menu.genre)
                 requireContext().showToast(R.string.lng_play_next)
             }
+            R.id.action_user_queue_add -> {
+                playbackModel.addToUserQueue(menu.genre)
+                requireContext().showToast(R.string.lng_user_queue_added)
+            }
             R.id.action_queue_add -> {
                 playbackModel.addToQueue(menu.genre)
                 requireContext().showToast(R.string.lng_queue_added)
@@ -290,6 +307,7 @@ class PlaylistMenuDialogFragment : MenuDialogFragment<Menu.ForPlaylist>() {
                 R.id.action_play,
                 R.id.action_shuffle,
                 R.id.action_play_next,
+                R.id.action_user_queue_add,
                 R.id.action_queue_add,
                 R.id.action_playlist_add,
                 R.id.action_export,
@@ -320,6 +338,10 @@ class PlaylistMenuDialogFragment : MenuDialogFragment<Menu.ForPlaylist>() {
             R.id.action_play_next -> {
                 playbackModel.playNext(menu.playlist)
                 requireContext().showToast(R.string.lng_play_next)
+            }
+            R.id.action_user_queue_add -> {
+                playbackModel.addToUserQueue(menu.playlist)
+                requireContext().showToast(R.string.lng_user_queue_added)
             }
             R.id.action_queue_add -> {
                 playbackModel.addToQueue(menu.playlist)
@@ -374,6 +396,10 @@ class SelectionMenuDialogFragment : MenuDialogFragment<Menu.ForSelection>() {
             R.id.action_play_next -> {
                 playbackModel.playNext(menu.songs)
                 requireContext().showToast(R.string.lng_play_next)
+            }
+            R.id.action_user_queue_add -> {
+                playbackModel.addToUserQueue(menu.songs)
+                requireContext().showToast(R.string.lng_user_queue_added)
             }
             R.id.action_queue_add -> {
                 playbackModel.addToQueue(menu.songs)

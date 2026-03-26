@@ -54,7 +54,11 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
             makeFlag(
                 ItemTouchHelper.ACTION_STATE_DRAG,
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ) or makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.START)
+            ) or
+                makeFlag(
+                    ItemTouchHelper.ACTION_STATE_SWIPE,
+                    ItemTouchHelper.START or ItemTouchHelper.END,
+                )
         } else {
             0
         }
@@ -127,7 +131,8 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
         // not being swiped. This issue is also the reason why the background is not merged with
         // the FrameLayout within the item.
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            holder.delete.isInvisible = dX == 0f
+            holder.delete.isInvisible = dX >= 0f
+            holder.addNext.isInvisible = dX <= 0f
         }
 
         // Update other translations. We do not call the default implementation, so we must do
@@ -162,6 +167,10 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
 
         shouldLift = true
 
+        // Reset swipe backgrounds
+        holder.delete.isInvisible = true
+        holder.addNext.isInvisible = true
+
         // Reset translations. We do not call the default implementation, so we must do
         // this ourselves.
         holder.body.translationX = 0f
@@ -181,6 +190,8 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
         val body: View
         /** The scrim view showing the delete icon. Should be behind [body]. */
         val delete: View
+        /** The scrim view showing the add-next icon. Should be behind [body]. */
+        val addNext: View
         /** The drawable of the [body] background that can be elevated. */
         val background: Drawable
     }

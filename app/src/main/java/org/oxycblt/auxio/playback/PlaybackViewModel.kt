@@ -521,6 +521,66 @@ constructor(
     }
 
     /**
+     * Add a [Song] to the user queue.
+     *
+     * @param song The [Song] to add.
+     */
+    fun addToUserQueue(song: Song) {
+        L.d("Adding $song to user queue")
+        playbackManager.addToUserQueue(song)
+    }
+
+    /**
+     * Add a [Album] to the user queue.
+     *
+     * @param album The [Album] to add.
+     */
+    fun addToUserQueue(album: Album) {
+        L.d("Adding $album to user queue")
+        playbackManager.addToUserQueue(listSettings.albumSongSort.songs(album.songs))
+    }
+
+    /**
+     * Add a [Artist] to the user queue.
+     *
+     * @param artist The [Artist] to add.
+     */
+    fun addToUserQueue(artist: Artist) {
+        L.d("Adding $artist to user queue")
+        playbackManager.addToUserQueue(listSettings.artistSongSort.songs(artist.songs))
+    }
+
+    /**
+     * Add a [Genre] to the user queue.
+     *
+     * @param genre The [Genre] to add.
+     */
+    fun addToUserQueue(genre: Genre) {
+        L.d("Adding $genre to user queue")
+        playbackManager.addToUserQueue(listSettings.genreSongSort.songs(genre.songs))
+    }
+
+    /**
+     * Add a [Playlist] to the user queue.
+     *
+     * @param playlist The [Playlist] to add.
+     */
+    fun addToUserQueue(playlist: Playlist) {
+        L.d("Adding $playlist to user queue")
+        playbackManager.addToUserQueue(playlist.songs)
+    }
+
+    /**
+     * Add [Song]s to the user queue.
+     *
+     * @param songs The [Song]s to add.
+     */
+    fun addToUserQueue(songs: List<Song>) {
+        L.d("Adding ${songs.size} songs to user queue")
+        playbackManager.addToUserQueue(songs)
+    }
+
+    /**
      * Add a [Song] to the end of the queue.
      *
      * @param song The [Song] to add.

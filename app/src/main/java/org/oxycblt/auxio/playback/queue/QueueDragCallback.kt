@@ -40,6 +40,11 @@ class QueueDragCallback(private val queueModel: QueueViewModel) : MaterialDragCa
         )
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        queueModel.removeQueueDataItem(viewHolder.bindingAdapterPosition)
+        when (direction) {
+            ItemTouchHelper.START ->
+                queueModel.removeQueueDataItem(viewHolder.bindingAdapterPosition)
+            ItemTouchHelper.END ->
+                queueModel.addToUserQueue(viewHolder.bindingAdapterPosition)
+        }
     }
 }

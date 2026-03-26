@@ -7,6 +7,24 @@
     android:layout_height="wrap_content">
 
     <View
+        android:id="@+id/add_next_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/add_next_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:contentDescription="@string/desc_add_to_user_queue"
+        android:padding="@dimen/spacing_medium"
+        android:src="@drawable/ic_queue_add_24"
+        app:tint="?attr/colorOnPrimary" />
+
+    <View
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -39,6 +39,8 @@ class PlaylistDragCallback(private val detailModel: DetailViewModel) : MaterialD
         )
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        detailModel.removePlaylistSong(viewHolder.bindingAdapterPosition)
+        if (direction == androidx.recyclerview.widget.ItemTouchHelper.START) {
+            detailModel.removePlaylistSong(viewHolder.bindingAdapterPosition)
+        }
     }
 }
