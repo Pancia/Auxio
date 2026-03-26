@@ -123,6 +123,7 @@
     <string name="lbl_shuffle">Shuffle</string>
 
     <string name="lbl_queue">Queue</string>
+    <string name="lbl_controls_widget">Playback Controls</string>
     <string name="lbl_play_next">Play next</string>
     <string name="lbl_user_queue_add">Add to user queue</string>
     <string name="lbl_queue_add">Add to queue</string>
@@ -194,6 +195,9 @@
     <eat-comment />
 
     <string name="lng_widget">View and control music playback</string>
+    <string name="lng_queue_widget">View upcoming songs in queue</string>
+    <string name="lng_queue_widget_empty">No upcoming songs</string>
+    <string name="lng_controls_widget">Control music playback</string>
     <string name="lng_indexing">Loading your music library…</string>
     <string name="lng_observing">Monitoring your music library for changes…</string>
     <string name="lng_queue_added">Added to queue</string>

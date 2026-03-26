@@ -27,4 +27,6 @@ object PlaybackActions {
     const val ACTION_PLAY_PAUSE = BuildConfig.APPLICATION_ID + ".action.PLAY_PAUSE"
     const val ACTION_SKIP_NEXT = BuildConfig.APPLICATION_ID + ".action.NEXT"
     const val ACTION_EXIT = BuildConfig.APPLICATION_ID + ".action.EXIT"
+    const val ACTION_GOTO_QUEUE_INDEX = BuildConfig.APPLICATION_ID + ".action.GOTO_QUEUE_INDEX"
+    const val EXTRA_QUEUE_INDEX = BuildConfig.APPLICATION_ID + ".extra.QUEUE_INDEX"
 }

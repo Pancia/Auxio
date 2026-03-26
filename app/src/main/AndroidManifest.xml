@@ -145,6 +145,36 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
+        <!-- Queue widget. -->
+        <receiver
+            android:name=".widgets.QueueWidgetProvider"
+            android:exported="false"
+            android:label="@string/lbl_queue">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/queue_widget_info" />
+        </receiver>
+
+        <!-- Controls-only widget. -->
+        <receiver
+            android:name=".widgets.ControlsWidgetProvider"
+            android:exported="false"
+            android:label="@string/lbl_controls_widget">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/controls_widget_info" />
+        </receiver>
+
         <!-- Tasker 'start service' integration -->
         <activity
             android:name=".tasker.ActivityConfigStartAction"

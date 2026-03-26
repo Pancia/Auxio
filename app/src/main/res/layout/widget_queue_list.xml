@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ui_widget_bg_sharp"
+    android:backgroundTint="?attr/colorSurface"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_small"
+    android:theme="@style/Theme.Auxio.Widget"
+    tools:ignore="Overdraw">
+
+    <!-- Row 1 -->
+    <LinearLayout
+        android:id="@+id/queue_row_1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="@dimen/spacing_medium">
+
+        <TextView
+            android:id="@+id/queue_song_1"
+            style="@style/Widget.Auxio.TextView.Primary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Song Title 1" />
+
+        <TextView
+            android:id="@+id/queue_artist_1"
+            style="@style/Widget.Auxio.TextView.Secondary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Artist 1" />
+    </LinearLayout>
+
+    <!-- Row 2 -->
+    <LinearLayout
+        android:id="@+id/queue_row_2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="@dimen/spacing_medium">
+
+        <TextView
+            android:id="@+id/queue_song_2"
+            style="@style/Widget.Auxio.TextView.Primary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Song Title 2" />
+
+        <TextView
+            android:id="@+id/queue_artist_2"
+            style="@style/Widget.Auxio.TextView.Secondary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Artist 2" />
+    </LinearLayout>
+
+    <!-- Row 3 -->
+    <LinearLayout
+        android:id="@+id/queue_row_3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="@dimen/spacing_medium">
+
+        <TextView
+            android:id="@+id/queue_song_3"
+            style="@style/Widget.Auxio.TextView.Primary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Song Title 3" />
+
+        <TextView
+            android:id="@+id/queue_artist_3"
+            style="@style/Widget.Auxio.TextView.Secondary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Artist 3" />
+    </LinearLayout>
+
+    <!-- Row 4 -->
+    <LinearLayout
+        android:id="@+id/queue_row_4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="@dimen/spacing_medium">
+
+        <TextView
+            android:id="@+id/queue_song_4"
+            style="@style/Widget.Auxio.TextView.Primary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Song Title 4" />
+
+        <TextView
+            android:id="@+id/queue_artist_4"
+            style="@style/Widget.Auxio.TextView.Secondary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Artist 4" />
+    </LinearLayout>
+
+    <!-- Row 5 -->
+    <LinearLayout
+        android:id="@+id/queue_row_5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="@dimen/spacing_medium">
+
+        <TextView
+            android:id="@+id/queue_song_5"
+            style="@style/Widget.Auxio.TextView.Primary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Song Title 5" />
+
+        <TextView
+            android:id="@+id/queue_artist_5"
+            style="@style/Widget.Auxio.TextView.Secondary.AppWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Artist 5" />
+    </LinearLayout>
+
+</LinearLayout>

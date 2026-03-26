@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package org.oxycblt.auxio.playback.service
 
 import android.content.Context
@@ -35,6 +35,8 @@ import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.auxio.playback.state.DeferredPlayback
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.Progression
+import org.oxycblt.auxio.widgets.ControlsWidgetComponent
+import org.oxycblt.auxio.widgets.QueueWidgetComponent
 import org.oxycblt.auxio.widgets.WidgetComponent
 import org.oxycblt.musikr.MusicParent
 import org.oxycblt.musikr.Song
@@ -49,6 +51,8 @@ private constructor(
     exoHolderFactory: ExoPlaybackStateHolder.Factory,
     sessionHolderFactory: MediaSessionHolder.Factory,
     widgetComponentFactory: WidgetComponent.Factory,
+    queueWidgetComponentFactory: QueueWidgetComponent.Factory,
+    controlsWidgetComponentFactory: ControlsWidgetComponent.Factory,
     systemReceiverFactory: SystemPlaybackReceiver.Factory,
 ) : PlaybackStateManager.Listener {
     class Factory
@@ -59,6 +63,8 @@ private constructor(
         private val exoHolderFactory: ExoPlaybackStateHolder.Factory,
         private val sessionHolderFactory: MediaSessionHolder.Factory,
         private val widgetComponentFactory: WidgetComponent.Factory,
+        private val queueWidgetComponentFactory: QueueWidgetComponent.Factory,
+        private val controlsWidgetComponentFactory: ControlsWidgetComponent.Factory,
         private val systemReceiverFactory: SystemPlaybackReceiver.Factory,
     ) {
         fun create(context: Context, foregroundListener: ForegroundListener) =
@@ -70,6 +76,8 @@ private constructor(
                 exoHolderFactory,
                 sessionHolderFactory,
                 widgetComponentFactory,
+                queueWidgetComponentFactory,
+                controlsWidgetComponentFactory,
                 systemReceiverFactory,
             )
     }
@@ -80,10 +88,14 @@ private constructor(
     private val exoHolder = exoHolderFactory.create()
     private val sessionHolder = sessionHolderFactory.create(context, foregroundListener)
     private val widgetComponent = widgetComponentFactory.create(context)
+    private val queueWidgetComponent = queueWidgetComponentFactory.create(context)
+    private val controlsWidgetComponent = controlsWidgetComponentFactory.create(context)
     private val systemReceiver =
         systemReceiverFactory.create(
             context,
             widgetComponent,
+            queueWidgetComponent,
+            controlsWidgetComponent,
             onExitRequested = { playbackManager.endSession() },
         )
 
@@ -118,6 +130,8 @@ private constructor(
         exoHolder.attach()
         sessionHolder.attach()
         widgetComponent.attach()
+        queueWidgetComponent.attach()
+        controlsWidgetComponent.attach()
         systemReceiver.attach()
         playbackManager.addListener(this)
         updateAutoStopTimer(playbackManager.progression.isPlaying)
@@ -177,6 +191,8 @@ private constructor(
         waitJob.cancel()
         playbackManager.removeListener(this)
         systemReceiver.release()
+        controlsWidgetComponent.release()
+        queueWidgetComponent.release()
         widgetComponent.release()
         sessionHolder.release()
         exoHolder.release()

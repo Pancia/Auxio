@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package org.oxycblt.auxio.playback.service
 
 import android.content.BroadcastReceiver
@@ -27,6 +27,10 @@ import androidx.core.content.ContextCompat
 import javax.inject.Inject
 import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
+import org.oxycblt.auxio.widgets.ControlsWidgetComponent
+import org.oxycblt.auxio.widgets.ControlsWidgetProvider
+import org.oxycblt.auxio.widgets.QueueWidgetComponent
+import org.oxycblt.auxio.widgets.QueueWidgetProvider
 import org.oxycblt.auxio.widgets.WidgetComponent
 import org.oxycblt.auxio.widgets.WidgetProvider
 import timber.log.Timber as L
@@ -41,6 +45,8 @@ private constructor(
     private val playbackManager: PlaybackStateManager,
     private val playbackSettings: PlaybackSettings,
     private val widgetComponent: WidgetComponent,
+    private val queueWidgetComponent: QueueWidgetComponent,
+    private val controlsWidgetComponent: ControlsWidgetComponent,
     private val onExitRequested: () -> Unit,
 ) : BroadcastReceiver() {
     private var initialHeadsetPlugEventHandled = false
@@ -54,6 +60,8 @@ private constructor(
         fun create(
             context: Context,
             widgetComponent: WidgetComponent,
+            queueWidgetComponent: QueueWidgetComponent,
+            controlsWidgetComponent: ControlsWidgetComponent,
             onExitRequested: () -> Unit,
         ) =
             SystemPlaybackReceiver(
@@ -61,6 +69,8 @@ private constructor(
                 playbackManager,
                 playbackSettings,
                 widgetComponent,
+                queueWidgetComponent,
+                controlsWidgetComponent,
                 onExitRequested,
             )
     }
@@ -133,6 +143,21 @@ private constructor(
                 L.d("Received widget update event")
                 widgetComponent.update()
             }
+            PlaybackActions.ACTION_GOTO_QUEUE_INDEX -> {
+                val queueIndex = intent.getIntExtra(PlaybackActions.EXTRA_QUEUE_INDEX, -1)
+                if (queueIndex >= 0) {
+                    L.d("Received goto queue index event: $queueIndex")
+                    playbackManager.goto(queueIndex)
+                }
+            }
+            QueueWidgetProvider.ACTION_QUEUE_WIDGET_UPDATE -> {
+                L.d("Received queue widget update event")
+                queueWidgetComponent.update()
+            }
+            ControlsWidgetProvider.ACTION_CONTROLS_WIDGET_UPDATE -> {
+                L.d("Received controls widget update event")
+                controlsWidgetComponent.update()
+            }
         }
     }
 
@@ -169,6 +194,9 @@ private constructor(
                 addAction(PlaybackActions.ACTION_SKIP_NEXT)
                 addAction(PlaybackActions.ACTION_EXIT)
                 addAction(WidgetProvider.ACTION_WIDGET_UPDATE)
+                addAction(PlaybackActions.ACTION_GOTO_QUEUE_INDEX)
+                addAction(QueueWidgetProvider.ACTION_QUEUE_WIDGET_UPDATE)
+                addAction(ControlsWidgetProvider.ACTION_CONTROLS_WIDGET_UPDATE)
             }
     }
 }
