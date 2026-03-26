@@ -351,6 +351,26 @@ class ExoPlaybackStateHolder(
         deferSave()
     }
 
+    override fun addToUserQueue(songs: List<Song>, ack: StateAck.AddToUserQueue) {
+        // Insert at a specific resolved position after the user queue block.
+        // Use unscrambleQueueIndices to find the correct physical index.
+        val indices = player.unscrambleQueueIndices()
+        if (indices.isEmpty()) {
+            player.addMediaItems(songs.map { it.buildMediaItem() })
+        } else {
+            val resolvedAt = ack.at.coerceAtMost(indices.size)
+            val trueIndex =
+                if (resolvedAt < indices.size) {
+                    indices[resolvedAt]
+                } else {
+                    player.mediaItemCount
+                }
+            player.addMediaItems(trueIndex, songs.map { it.buildMediaItem() })
+        }
+        playbackManager.ack(this, ack)
+        deferSave()
+    }
+
     override fun addToQueue(songs: List<Song>, ack: StateAck.AddToQueue) {
         player.addMediaItems(songs.map { it.buildMediaItem() })
         playbackManager.ack(this, ack)

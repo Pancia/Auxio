@@ -18,6 +18,7 @@
  
 package org.oxycblt.auxio.detail.list
 
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.list.recycler.MaterialDragCallback
@@ -28,6 +29,9 @@ import org.oxycblt.auxio.list.recycler.MaterialDragCallback
  * @author Alexander Capehart (OxygenCobalt)
  */
 class PlaylistDragCallback(private val detailModel: DetailViewModel) : MaterialDragCallback() {
+    override val swipeFlags: Int
+        get() = ItemTouchHelper.START
+
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,

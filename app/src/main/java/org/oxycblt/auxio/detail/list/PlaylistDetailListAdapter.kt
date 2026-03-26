@@ -231,7 +231,9 @@ private constructor(private val binding: ItemEditableSongBinding) :
     override val root = binding.root
     override val body = binding.body
     override val delete = binding.background
+    override val deleteIcon = binding.deleteIcon
     override val addNext = binding.addNextBackground
+    override val addNextIcon = binding.addNextIcon
     override val background =
         MaterialShapeDrawable.createWithElevationOverlay(binding.root.context).apply {
             fillColor = binding.context.getAttrColorCompat(MR.attr.colorSurfaceContainerHigh)

@@ -18,6 +18,7 @@
 
 package org.oxycblt.auxio.widgets
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
@@ -30,6 +31,7 @@ import org.oxycblt.auxio.BuildConfig
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
+import org.oxycblt.auxio.playback.service.PlaybackActions
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.ui.UISettingsImpl
 import timber.log.Timber as L
@@ -101,6 +103,18 @@ class QueueWidgetProvider : AppWidgetProvider() {
                 views.setViewVisibility(rowIds[i], View.VISIBLE)
                 views.setTextViewText(songIds[i], song.name.resolve(context))
                 views.setTextViewText(artistIds[i], song.artists.resolveNames(context))
+                // Set up tap-to-jump: each row jumps to its absolute queue index
+                val gotoIntent =
+                    Intent(PlaybackActions.ACTION_GOTO_QUEUE_INDEX)
+                        .putExtra(PlaybackActions.EXTRA_QUEUE_INDEX, state.startIndex + i)
+                val pendingIntent =
+                    PendingIntent.getBroadcast(
+                        context,
+                        state.startIndex + i,
+                        gotoIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                    )
+                views.setOnClickPendingIntent(rowIds[i], pendingIntent)
             } else {
                 views.setViewVisibility(rowIds[i], View.GONE)
             }

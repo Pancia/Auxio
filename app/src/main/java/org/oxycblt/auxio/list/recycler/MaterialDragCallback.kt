@@ -46,6 +46,10 @@ import timber.log.Timber as L
 abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
     private var shouldLift = true
 
+    /** Swipe directions enabled for this callback. Override to restrict. */
+    open val swipeFlags: Int
+        get() = ItemTouchHelper.START or ItemTouchHelper.END
+
     final override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -54,11 +58,7 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
             makeFlag(
                 ItemTouchHelper.ACTION_STATE_DRAG,
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ) or
-                makeFlag(
-                    ItemTouchHelper.ACTION_STATE_SWIPE,
-                    ItemTouchHelper.START or ItemTouchHelper.END,
-                )
+            ) or makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, swipeFlags)
         } else {
             0
         }
@@ -131,8 +131,12 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
         // not being swiped. This issue is also the reason why the background is not merged with
         // the FrameLayout within the item.
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            holder.delete.isInvisible = dX >= 0f
-            holder.addNext.isInvisible = dX <= 0f
+            val swipingLeft = dX < 0f
+            val swipingRight = dX > 0f
+            holder.delete.isInvisible = !swipingLeft
+            holder.deleteIcon.isInvisible = !swipingLeft
+            holder.addNext.isInvisible = !swipingRight
+            holder.addNextIcon.isInvisible = !swipingRight
         }
 
         // Update other translations. We do not call the default implementation, so we must do
@@ -167,9 +171,11 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
 
         shouldLift = true
 
-        // Reset swipe backgrounds
+        // Reset swipe backgrounds and icons
         holder.delete.isInvisible = true
+        holder.deleteIcon.isInvisible = true
         holder.addNext.isInvisible = true
+        holder.addNextIcon.isInvisible = true
 
         // Reset translations. We do not call the default implementation, so we must do
         // this ourselves.
@@ -188,10 +194,14 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
         val root: View
         /** The body view containing music information. */
         val body: View
-        /** The scrim view showing the delete icon. Should be behind [body]. */
+        /** The scrim background for delete. Should be behind [body]. */
         val delete: View
-        /** The scrim view showing the add-next icon. Should be behind [body]. */
+        /** The icon view for delete scrim. */
+        val deleteIcon: View
+        /** The scrim background for add-next. Should be behind [body]. */
         val addNext: View
+        /** The icon view for add-next scrim. */
+        val addNextIcon: View
         /** The drawable of the [body] background that can be elevated. */
         val background: Drawable
     }

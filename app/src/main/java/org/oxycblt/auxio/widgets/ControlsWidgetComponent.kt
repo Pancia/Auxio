@@ -52,6 +52,7 @@ private constructor(
     }
 
     private val controlsWidgetProvider = ControlsWidgetProvider()
+    private var lastIsPlaying = false
 
     fun attach() {
         playbackManager.addListener(this)
@@ -89,7 +90,7 @@ private constructor(
     override fun onIndexMoved(index: Int) = update()
 
     override fun onQueueChanged(queue: List<Song>, index: Int, change: QueueChange) {
-        if (change.type == QueueChange.Type.SONG) {
+        if (change.type == QueueChange.Type.SONG || change.type == QueueChange.Type.INDEX) {
             update()
         }
     }
@@ -103,7 +104,14 @@ private constructor(
         isShuffled: Boolean,
     ) = update()
 
-    override fun onProgressionChanged(progression: Progression) = update()
+    override fun onProgressionChanged(progression: Progression) {
+        // Only update when play/pause state changes, not on every position tick,
+        // since this widget has no progress bar.
+        if (progression.isPlaying != lastIsPlaying) {
+            lastIsPlaying = progression.isPlaying
+            update()
+        }
+    }
 
     override fun onRepeatModeChanged(repeatMode: RepeatMode) = update()
 

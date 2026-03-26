@@ -73,9 +73,9 @@ private constructor(
             return
         }
 
-        val upcomingSongs = queue.subList(upcomingStart, upcomingEnd)
+        val upcomingSongs = queue.subList(upcomingStart, upcomingEnd).toList()
         L.d("Updating queue widget with ${upcomingSongs.size} upcoming songs")
-        queueWidgetProvider.update(context, uiSettings, QueueState(upcomingSongs))
+        queueWidgetProvider.update(context, uiSettings, QueueState(upcomingSongs, upcomingStart))
     }
 
     /** Release this instance, preventing any further events from updating the widget instances. */
@@ -108,5 +108,9 @@ private constructor(
      *
      * @param songs The list of upcoming [Song]s to display (up to 5).
      */
-    data class QueueState(val songs: List<Song>)
+    /**
+     * @param songs The list of upcoming [Song]s to display (up to 5).
+     * @param startIndex The absolute queue index of the first song in [songs].
+     */
+    data class QueueState(val songs: List<Song>, val startIndex: Int)
 }

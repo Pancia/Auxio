@@ -40,11 +40,15 @@ class QueueDragCallback(private val queueModel: QueueViewModel) : MaterialDragCa
         )
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val position = viewHolder.bindingAdapterPosition
         when (direction) {
-            ItemTouchHelper.START ->
-                queueModel.removeQueueDataItem(viewHolder.bindingAdapterPosition)
-            ItemTouchHelper.END ->
-                queueModel.addToUserQueue(viewHolder.bindingAdapterPosition)
+            ItemTouchHelper.START -> queueModel.removeQueueDataItem(position)
+            ItemTouchHelper.END -> {
+                // Non-destructive: copy the song into the user queue, then reset
+                // the swiped view back to its original position.
+                queueModel.addToUserQueue(position)
+                viewHolder.bindingAdapter?.notifyItemChanged(position)
+            }
         }
     }
 }

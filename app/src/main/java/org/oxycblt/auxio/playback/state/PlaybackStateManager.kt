@@ -514,7 +514,7 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
             val stateHolder = stateHolder ?: return
             val insertAt = stateMirror.index + 1 + stateMirror.userQueueSize
             L.d("Adding ${songs.size} songs to user queue at $insertAt")
-            stateHolder.playNext(songs, StateAck.PlayNext(insertAt, songs.size))
+            stateHolder.addToUserQueue(songs, StateAck.AddToUserQueue(insertAt, songs.size))
         }
     }
 
@@ -635,6 +635,22 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
                     stateMirror.copy(
                         queue = rawQueue.resolveSongs(),
                         rawQueue = rawQueue,
+                        // playNext inserts before the user queue block, so shift
+                        // the user queue size to account for the new songs
+                        userQueueSize = stateMirror.userQueueSize + ack.size,
+                    )
+                listeners.forEach {
+                    it.onQueueChanged(stateMirror.queue, stateMirror.index, change)
+                }
+            }
+            is StateAck.AddToUserQueue -> {
+                val rawQueue = stateHolder.resolveQueue()
+                val change =
+                    QueueChange(QueueChange.Type.MAPPING, UpdateInstructions.Add(ack.at, ack.size))
+                stateMirror =
+                    stateMirror.copy(
+                        queue = rawQueue.resolveSongs(),
+                        rawQueue = rawQueue,
                         userQueueSize = stateMirror.userQueueSize + ack.size,
                     )
                 listeners.forEach {
@@ -660,12 +676,22 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
                         UpdateInstructions.Move(ack.from, ack.to),
                     )
 
+                // Reset user queue counter if the move involves the user queue
+                // range, as we can no longer track the boundary accurately.
+                val userQueueEnd = stateMirror.index + stateMirror.userQueueSize
+                val moveTouchesUserQueue =
+                    (ack.from > stateMirror.index && ack.from <= userQueueEnd) ||
+                        (ack.to > stateMirror.index && ack.to <= userQueueEnd) ||
+                        stateMirror.index != newIndex
+                val newUserQueueSize =
+                    if (moveTouchesUserQueue) 0 else stateMirror.userQueueSize
+
                 stateMirror =
                     stateMirror.copy(
                         queue = rawQueue.resolveSongs(),
                         index = newIndex,
                         rawQueue = rawQueue,
-                        userQueueSize = 0,
+                        userQueueSize = newUserQueueSize,
                     )
 
                 listeners.forEach {
@@ -686,13 +712,18 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
                     )
 
                 val newUserQueueSize =
-                    if (ack.index > stateMirror.index &&
-                        ack.index <= stateMirror.index + stateMirror.userQueueSize
-                    ) {
-                        (stateMirror.userQueueSize - 1).coerceAtLeast(0)
-                    } else if (ack.index <= stateMirror.index) {
+                    if (ack.index == stateMirror.index) {
+                        // Removing the currently playing song — reset counter
                         0
+                    } else if (
+                        ack.index > stateMirror.index &&
+                            ack.index <= stateMirror.index + stateMirror.userQueueSize
+                    ) {
+                        // Removing a song within the user queue block
+                        (stateMirror.userQueueSize - 1).coerceAtLeast(0)
                     } else {
+                        // Removing a song outside the user queue block (before
+                        // current or after the block) — counter stays the same
                         stateMirror.userQueueSize
                     }
 

@@ -22,6 +22,7 @@
         android:contentDescription="@string/desc_add_to_user_queue"
         android:padding="@dimen/spacing_medium"
         android:src="@drawable/ic_queue_add_24"
+        android:visibility="invisible"
         app:tint="?attr/colorOnPrimary" />
 
     <View
@@ -32,6 +33,7 @@
         android:visibility="invisible" />
 
     <ImageView
+        android:id="@+id/delete_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
@@ -39,6 +41,7 @@
         android:contentDescription="@string/desc_remove_song"
         android:padding="@dimen/spacing_medium"
         android:src="@drawable/ic_delete_24"
+        android:visibility="invisible"
         app:tint="?attr/colorOnError" />
 
     <FrameLayout

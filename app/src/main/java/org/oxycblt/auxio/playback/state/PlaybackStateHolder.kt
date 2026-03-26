@@ -97,6 +97,14 @@ interface PlaybackStateHolder {
     fun playNext(songs: List<Song>, ack: StateAck.PlayNext)
 
     /**
+     * Add songs to the user queue block (after current + existing user queue).
+     *
+     * @param songs The songs to add.
+     * @param ack The [StateAck] to return to [PlaybackStateManager].
+     */
+    fun addToUserQueue(songs: List<Song>, ack: StateAck.AddToUserQueue)
+
+    /**
      * Add songs to the end of the queue.
      *
      * @param songs The songs to add.
@@ -177,6 +185,9 @@ sealed interface StateAck {
 
     /** @see PlaybackStateHolder.playNext */
     data class PlayNext(val at: Int, val size: Int) : StateAck
+
+    /** Inserting songs into the user queue block after the current song + existing user queue. */
+    data class AddToUserQueue(val at: Int, val size: Int) : StateAck
 
     /** @see PlaybackStateHolder.addToQueue */
     data class AddToQueue(val at: Int, val size: Int) : StateAck

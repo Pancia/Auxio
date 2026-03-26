@@ -145,7 +145,7 @@ private constructor(
             }
             PlaybackActions.ACTION_GOTO_QUEUE_INDEX -> {
                 val queueIndex = intent.getIntExtra(PlaybackActions.EXTRA_QUEUE_INDEX, -1)
-                if (queueIndex >= 0) {
+                if (queueIndex in 0 until playbackManager.queue.size) {
                     L.d("Received goto queue index event: $queueIndex")
                     playbackManager.goto(queueIndex)
                 }
